@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "GX Glass Start",
+  "short_name": "GX Glass Start",
+  "version": "1.0.0",
+  "description": "A customizable Chromium new-tab page with quick-link folders, RSS feeds, and drag-and-drop layout.",
+  "permissions": ["storage", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_title": "Open GX Glass Start"
+  },
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "commands": {
+    "open-dashboard": {
+      "description": "Open GX Glass Start dashboard"
+    }
+  },
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  }
+}

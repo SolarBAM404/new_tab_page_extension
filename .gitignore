@@ -1,0 +1,6 @@
+dist/
+__MACOSX/
+.DS_Store
+*.zip
+*.xpi
+.repo-git/

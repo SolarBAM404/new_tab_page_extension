@@ -1,0 +1,41 @@
+name: Build Extensions
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: Package Firefox and Chromium extensions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify build tools
+        run: |
+          jq --version
+          tar --version | head -n 1
+          zip --version | head -n 1
+
+      - name: Package extensions
+        run: scripts/package-extensions.sh
+
+      - name: Show build outputs
+        run: ls -lh dist
+
+      - name: Upload packaged extensions
+        uses: actions/upload-artifact@v4
+        with:
+          name: gx-glass-start-extensions
+          path: |
+            dist/*.xpi
+            dist/*.zip
+          if-no-files-found: error

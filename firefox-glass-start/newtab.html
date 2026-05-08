@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GX Glass Start for Firefox</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient"></div>
+
+  <header class="topbar glass">
+    <div class="brand">
+      <h1 id="page-title">GX Glass Start for Firefox</h1>
+      <p id="clock" aria-live="polite"></p>
+    </div>
+
+    <div class="actions">
+      <button id="toggle-lock-btn" class="btn">Lock Layout</button>
+      <button id="add-folder-btn" class="btn">New Folder</button>
+      <button id="add-feed-btn" class="btn">Add RSS Feed</button>
+      <button id="export-layout-btn" class="btn">Export Layout</button>
+      <button id="import-layout-btn" class="btn">Import Layout</button>
+      <button id="settings-btn" class="btn btn-accent">Customize</button>
+      <input id="import-layout-input" type="file" accept="application/json,.json" hidden />
+    </div>
+  </header>
+
+  <main>
+    <section id="board" class="board" aria-label="Dashboard widgets"></section>
+  </main>
+
+  <div id="settings-panel" class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
+    <form id="settings-form" class="settings-card glass">
+      <div class="settings-head">
+        <h2 id="settings-title">Customize</h2>
+        <button id="settings-close-btn" class="icon-btn" type="button" aria-label="Close customization panel">Close</button>
+      </div>
+
+      <div class="settings-grid">
+        <label class="settings-field settings-wide">
+          <span>Title</span>
+          <input id="settings-title-text" type="text" maxlength="80" />
+        </label>
+
+        <label class="settings-field">
+          <span>Date format</span>
+          <select id="settings-date-format">
+            <option value="weekday-date-time">Tue, May 5, 15:29</option>
+            <option value="date-time">May 5, 2026, 15:29</option>
+            <option value="time-date">15:29 - May 5</option>
+            <option value="time-only">15:29</option>
+            <option value="date-only">May 5, 2026</option>
+            <option value="iso-date-time">2026-05-05 15:29</option>
+            <option value="custom">Custom</option>
+          </select>
+        </label>
+
+        <label class="settings-field">
+          <span>Custom date pattern</span>
+          <input id="settings-date-pattern" type="text" maxlength="80" placeholder="ddd, MMM D, HH:mm" />
+        </label>
+
+        <label class="settings-field">
+          <span>Background preset</span>
+          <select id="settings-background-preset">
+            <option value="gx">GX Glass</option>
+            <option value="aurora">Aurora</option>
+            <option value="midnight">Midnight</option>
+            <option value="ember">Ember</option>
+            <option value="mono">Mono</option>
+            <option value="custom">Custom</option>
+          </select>
+        </label>
+
+        <label class="settings-field color-field">
+          <span>Accent</span>
+          <input id="settings-accent" type="color" />
+        </label>
+
+        <label class="settings-field color-field">
+          <span>Background start</span>
+          <input id="settings-bg-start" type="color" />
+        </label>
+
+        <label class="settings-field color-field">
+          <span>Background end</span>
+          <input id="settings-bg-end" type="color" />
+        </label>
+
+        <label class="settings-field color-field">
+          <span>Glow primary</span>
+          <input id="settings-glow-primary" type="color" />
+        </label>
+
+        <label class="settings-field color-field">
+          <span>Glow secondary</span>
+          <input id="settings-glow-secondary" type="color" />
+        </label>
+
+        <label class="settings-field">
+          <span>Glass strength <output id="settings-glass-value"></output></span>
+          <input id="settings-glass" type="range" min="4" max="22" step="1" />
+        </label>
+
+        <label class="settings-field">
+          <span>Blur <output id="settings-blur-value"></output></span>
+          <input id="settings-blur" type="range" min="0" max="28" step="1" />
+        </label>
+
+        <label class="settings-field">
+          <span>Corner radius <output id="settings-radius-value"></output></span>
+          <input id="settings-radius" type="range" min="8" max="24" step="1" />
+        </label>
+
+        <label class="settings-field">
+          <span>Text scale <output id="settings-text-scale-value"></output></span>
+          <input id="settings-text-scale" type="range" min="90" max="115" step="5" />
+        </label>
+
+        <label class="settings-field">
+          <span>Density</span>
+          <select id="settings-density">
+            <option value="comfortable">Comfortable</option>
+            <option value="compact">Compact</option>
+            <option value="spacious">Spacious</option>
+          </select>
+        </label>
+
+        <label class="settings-check">
+          <input id="settings-texture" type="checkbox" />
+          <span>Background texture</span>
+        </label>
+
+        <label class="settings-check">
+          <input id="settings-animations" type="checkbox" />
+          <span>Animations</span>
+        </label>
+      </div>
+
+      <div class="settings-actions">
+        <button id="settings-reset-btn" class="btn" type="button">Reset</button>
+        <button id="settings-cancel-btn" class="btn" type="button">Cancel</button>
+        <button class="btn btn-accent" type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="link-modal" class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title" hidden>
+    <form id="link-form" class="modal-card glass">
+      <div class="modal-head">
+        <h2 id="link-modal-title">New Link</h2>
+        <button id="link-close-btn" class="icon-btn" type="button" aria-label="Close link editor">Close</button>
+      </div>
+
+      <div class="modal-grid">
+        <label class="modal-field">
+          <span>Title</span>
+          <input id="link-title-input" type="text" maxlength="80" required />
+        </label>
+
+        <label class="modal-field">
+          <span>URL</span>
+          <input id="link-url-input" type="text" maxlength="400" placeholder="https://example.com" required />
+        </label>
+
+        <label class="modal-field modal-wide">
+          <span>Icon URL</span>
+          <input id="link-icon-url-input" type="text" maxlength="500" placeholder="Leave blank to use the site favicon" />
+        </label>
+      </div>
+
+      <p id="link-modal-error" class="modal-error" aria-live="polite"></p>
+
+      <div class="modal-actions">
+        <button id="link-cancel-btn" class="btn" type="button">Cancel</button>
+        <button class="btn btn-accent" type="submit">Save Link</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="feed-controls-modal" class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="feed-controls-title" hidden>
+    <form id="feed-controls-form" class="modal-card glass">
+      <div class="modal-head">
+        <h2 id="feed-controls-title">RSS Controls</h2>
+        <button id="feed-controls-close-btn" class="icon-btn" type="button" aria-label="Close RSS controls">Close</button>
+      </div>
+
+      <div class="modal-grid">
+        <label class="modal-field">
+          <span>Max items</span>
+          <input id="feed-max-items-input" type="number" min="1" max="30" step="1" required />
+        </label>
+
+        <label class="modal-field">
+          <span>Source</span>
+          <select id="feed-source-select"></select>
+        </label>
+
+        <label class="modal-field">
+          <span>Source label</span>
+          <input id="feed-source-name-input" type="text" maxlength="80" required />
+        </label>
+
+        <label class="modal-field">
+          <span>Source URL</span>
+          <input id="feed-source-url-input" type="text" maxlength="500" placeholder="https://example.com/feed.xml" required />
+        </label>
+      </div>
+
+      <p id="feed-controls-error" class="modal-error" aria-live="polite"></p>
+
+      <div class="modal-actions split-actions">
+        <button id="feed-delete-source-btn" class="btn modal-danger" type="button">Delete Source</button>
+        <span class="modal-action-spacer"></span>
+        <button id="feed-add-source-btn" class="btn" type="button">New Source</button>
+        <button id="feed-move-source-btn" class="btn" type="button" hidden>Move Source Here</button>
+        <button id="feed-controls-cancel-btn" class="btn" type="button">Cancel</button>
+        <button class="btn btn-accent" type="submit">Save Controls</button>
+      </div>
+    </form>
+  </div>
+
+  <template id="folder-template">
+    <article class="widget glass folder-widget" draggable="true">
+      <div class="widget-head">
+        <h2 class="widget-title"></h2>
+        <div class="widget-tools">
+          <button class="mini-btn collapse-widget-btn" type="button">Collapse</button>
+          <button class="mini-btn orient-widget-btn" type="button">Horizontal</button>
+          <button class="mini-btn add-link-btn">+ Link</button>
+          <button class="mini-btn rename-folder-btn">Rename</button>
+          <button class="mini-btn danger delete-folder-btn">Delete</button>
+        </div>
+      </div>
+      <div class="widget-content">
+        <ul class="links-list"></ul>
+        <p class="hint link-drag-hint">Drag links into another folder to move them.</p>
+      </div>
+    </article>
+  </template>
+
+  <template id="feed-template">
+    <article class="widget glass feed-widget" draggable="true">
+      <div class="widget-head">
+        <h2 class="widget-title"></h2>
+        <div class="widget-tools">
+          <button class="mini-btn collapse-widget-btn" type="button">Collapse</button>
+          <button class="mini-btn orient-widget-btn" type="button">Horizontal</button>
+          <button class="mini-btn refresh-feed-btn">Refresh</button>
+          <button class="mini-btn feed-controls-btn">Controls</button>
+          <button class="mini-btn rename-feed-btn">Rename</button>
+          <button class="mini-btn danger delete-feed-btn">Delete</button>
+        </div>
+      </div>
+      <div class="widget-content">
+        <div class="feed-tabs" role="tablist" aria-label="Feed sources"></div>
+        <ul class="feed-list"></ul>
+        <p class="hint"></p>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
